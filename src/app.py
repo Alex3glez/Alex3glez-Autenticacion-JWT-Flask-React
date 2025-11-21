@@ -10,6 +10,8 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 # from models import Person
 
@@ -28,6 +30,11 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECREt_KEY']='vmoehrpmcvfpojoanveifsfef4354t3e6efg5y54defgve45546b44hg45brbrtbrtyu656y5yrthhtrhfdh'
+app.config['JWT_ACCESS_TOKEN_EXPIRES']=timedelta(minutes=30)
+
+jwt= JWTManager(app)
+
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
