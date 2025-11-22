@@ -22,37 +22,37 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+
 @api.route('/signup', methods=['POST'])
 def create_user():
-    data=request.get_json()
-    user=User.create_new_user(
-        #aqui se harian validaciones
+    data = request.get_json()
+    user = User.create_new_user(
+        # aqui se harian validaciones
         email=data.get("email"),
         password=data.get("password")
-        )
+    )
     return jsonify(user.to_dict())
-    
+
 
 @api.route('/login', methods=['POST'])
 def login():
-    data=request.get_json()
-    user= User.find_by_email(data.get("email"))
+    data = request.get_json()
+    user = User.find_by_email(data.get("email"))
 
-    if not user: 
+    if not user:
         return jsonify({
-        "error":True,
-        "msg": "usuario no encontrado"
-    }), 400
+            "error": True,
+            "msg": "usuario no encontrado"
+        }), 400
 
     if user and user.check_psw(data.get("password")):
-        access_token= create_access_token(identity= str(user.id))
+        access_token = create_access_token(identity=str(user.id))
         return jsonify({
             "user": user.to_dict(),
             "token": access_token}), 200
 
-
     return jsonify({
-        "error":True,
+        "error": True,
         "msg": "verifica los datos ingresados"
     }), 400
 
@@ -60,10 +60,10 @@ def login():
 @api.route('/private', methods=['POST', 'GET'])
 @jwt_required()
 def msg_privado():
-    user_id= get_jwt_identity()
-    user= db.session.get(User, user_id)
+    user_id = get_jwt_identity()
+    user = db.session.get(User, user_id)
     response_body = {
-        "message": "mensaje privado",
+        "message": "Zona exclusiva PRIVADA",
         "user": user.to_dict()
     }
 
